@@ -66,3 +66,253 @@ public class NumberGuessing
         scanner.close();
     }
 }
+
+//TASK 2
+
+//STUDENT GRADE CALCULATOR
+
+//Input: Take marks obtained (out of 100) in each subject.
+//Calculate Total Marks: Sum up the marks obtained in all subjects.
+//Calculate Average Percentage: Divide the total marks by the total number of subjects to get the
+//average percentage.
+//Grade Calculation: Assign grades based on the average percentage achieved.
+//Display Results: Show the total marks, average percentage, and the corresponding grade to the user
+
+import java.util.Scanner;
+
+public class StudentGradeCalculator {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of subjects: ");
+        int numSubjects = scanner.nextInt();
+        int totalMarks = 0;
+        for (int i = 1; i <= numSubjects; i++) {
+            System.out.print("Enter a mark in "+ i + " subject: ");
+            int marks = scanner.nextInt();
+            totalMarks += marks;
+        }
+        double averagePercentage = (double) totalMarks / numSubjects;
+        System.out.println("\nTotal Marks Obtained: " + totalMarks);
+        System.out.println("Average Percentage: " + averagePercentage + "%");
+        char grade = calculateGrade(averagePercentage);
+        System.out.println("Grade: " + grade);
+        scanner.close();
+    }
+    public static char calculateGrade(double averagePercentage) {
+        char grade;
+        if (averagePercentage >= 90) {
+            grade = 'A';
+        }
+        else if (averagePercentage >= 80) {
+            grade = 'B';
+        }
+        else if (averagePercentage >= 70) {
+            grade = 'C';
+        }
+        else if (averagePercentage >= 60) {
+            grade = 'D';
+        }
+        else if (averagePercentage >= 50) {
+            grade = 'E';
+        }
+        else {
+            grade = 'F';
+        }
+        return grade;
+    }
+}
+
+//TASK 3
+// ATM INTERFACE
+
+//1.Create a class to represent the ATM machine.
+//2. Design the user interface for the ATM, including options such as withdrawing, depositing, and checking the balance.
+//3. Implement methods for each option, such as withdraw(amount), deposit(amount), and checkBalance().
+//4. Create a class to represent the user's bank account, which stores the account balance.
+//5. Connect the ATM class with the user's bank account class to access and modify the account balance.
+//6. Validate user input to ensure it is within acceptable limits (eg.. sufficient balance for withdrawals).
+//7. Display appropriate messages to the user based on their chosen options and the success or failure of their transaction
+
+import java.util.Scanner;
+public class ATM
+{
+    public static void main(String args[] )
+    {
+        int balance = 0, withdraw, deposit;
+        Scanner sc = new Scanner(System.in);
+        while(true)
+        {
+            System.out.println("Automated Teller Machine");
+            System.out.println("Choose 1 for Withdraw");
+            System.out.println("Choose 2 for Deposit");
+            System.out.println("Choose 3 for Check Balance");
+            System.out.println("Choose 4 for EXIT");
+            System.out.print("Choose the operation you want to perform:");
+            int choice = sc.nextInt();
+            switch(choice)
+            {
+                case 1:
+                    System.out.print("Enter money to be withdrawn:");
+                    withdraw = sc.nextInt();
+                    if(balance >= withdraw)
+                    {
+                        balance = balance - withdraw;
+                        System.out.println("Please collect your money");
+                    }
+                    else
+                    {
+                        System.out.println("Insufficient Balance");
+                    }
+                    System.out.println("");
+                    break;
+                case 2:
+
+                    System.out.print("Enter money to be deposited:");
+                    deposit = sc.nextInt();
+                    balance = balance + deposit;
+                    System.out.println("Your Money has been successfully deposited");
+                    System.out.println("");
+                    break;
+                case 3:
+                    System.out.println("Balance : "+balance);
+                    System.out.println("");
+                    break;
+                case 4:
+                    System.exit(0);
+            }
+        }
+    }
+}
+
+//TASK 4
+
+//QUIZ APPLICATION WITH TIMER
+
+//1. Quiz Questions and Options: Store quiz questions along with multiple-choice options and correct answer.
+//2. Timer: Implement a timer for each question to limit the time to answer.
+//3. Question Display: Present one question at a time with multiple-choice options.
+//4. Answer Submission: Allow users to select an option and submit their answer within the given time.
+//5. Score Calculation: Keep track of the user's score based on correct answers.
+
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.ArrayList;
+public class QuizApp
+{
+    private static final int QUESTION_TIME_LIMIT = 10; // Time limit in seconds per question
+    private static int score = 0;
+    private static int questionIndex = 0;
+    private static boolean answered = false;
+    private static Timer timer = new Timer();
+    // Define quiz questions, options, and correct answers
+    static class Question {
+        String question;
+        String[] options;
+        String correctAnswer;
+        public Question(String question, String[] options, String correctAnswer)
+        {
+            this.question = question;
+            this.options = options;
+            this.correctAnswer = correctAnswer;
+        }
+    }
+    private static ArrayList<Question> quizQuestions = new ArrayList<>();
+    // Main method to start the quiz
+    public static void main(String[] args)
+    {
+        // Initialize questions
+        initQuiz();
+        // Start the quiz
+        runQuiz();
+    }
+    // Initialize quiz questions
+    public static void initQuiz() {
+        quizQuestions.add(new Question(
+                "What is the capital of Tamilnadu?",
+                new String[]{"Paris", "Chennai", "Trichy", "Berlin"},
+                "Chennai"
+        ));
+        quizQuestions.add(new Question(
+                "How many days are in a week??",
+                new String[]{"5", "8", "6", "7"},
+                "7"
+        ));
+        quizQuestions.add(new Question(
+                "What is the national animal of India??",
+                new String[]{"Blue whale", "Horse", "Rabbit", "Tiger"},
+                "Tiger"
+        ));
+    }
+    // Run the quiz, question by question
+    public static void runQuiz()
+    {
+        Scanner scanner = new Scanner(System.in);
+        while (questionIndex < quizQuestions.size())
+        {
+            // Reset the answered flag for each new question
+            answered = false;
+            // Display the question
+            displayQuestion(quizQuestions.get(questionIndex));
+            // Start the timer for this question
+            startTimer();
+            // Wait for the user to input an answer or time out
+            String userAnswer = null;
+            while (!answered)
+            {
+                if (scanner.hasNextLine())
+                {
+                    userAnswer = scanner.nextLine().trim();
+                    if (!userAnswer.isEmpty())
+                    {
+                        answered = true;
+                    }
+                }
+            }
+            // Check answer
+            if (userAnswer.equalsIgnoreCase(quizQuestions.get(questionIndex).correctAnswer))
+            {
+                score++;
+            }
+            // Move to the next question
+            questionIndex++;
+        }
+        showResult();
+        scanner.close();
+    }
+    // Display the question and options
+    public static void displayQuestion(Question question)
+    {
+        System.out.println("\nQuestion: " + question.question);
+        System.out.println("Options:");
+        for (int i = 0; i < question.options.length; i++)
+        {
+            System.out.println((i + 1) + ". " + question.options[i]);
+        }
+        System.out.println("\nYou have " + QUESTION_TIME_LIMIT + " seconds to answer this question.");
+        System.out.println("Enter your answer: ");
+    }
+    public static void startTimer()
+    {
+        timer.schedule(new TimerTask()
+        {
+            public void run()
+            {
+                if (!answered)
+                {
+                    System.out.println("\nTime is up! Moving to the next question.");
+                    answered = true;
+                }
+            }
+        }, QUESTION_TIME_LIMIT * 1000);
+    }
+    // Display the result after the quiz is finished
+    public static void showResult()
+    {
+        System.out.println("\nQuiz Finished!");
+        System.out.println("Your total score is: " + score + " out of " + quizQuestions.size());
+        System.out.println("Correct answers: " + score);
+        System.out.println("Incorrect answers: " + (quizQuestions.size() - score));
+    }
+}
